@@ -1,6 +1,8 @@
 package com.example.viddle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,11 +44,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setHasFixedSize(true);
 
-
     }
 
     @Override
     public void onPicClick(int position) {
         Log.d("TAG", "Item" + position);
+        GuessFragment guessFragment = new GuessFragment(position);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        guessFragment.setArguments(bundle);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.frame, guessFragment);
+        fragmentTransaction.commit();
     }
 }
