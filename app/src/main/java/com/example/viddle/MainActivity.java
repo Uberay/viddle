@@ -1,6 +1,7 @@
 package com.example.viddle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -33,6 +34,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+
+        //this is the most motherfucking stupid default ever made
+        myToolbar.setContentInsetsAbsolute(0,0);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);

@@ -31,6 +31,9 @@ public class GuessFragment extends Fragment {
                     R.drawable.pic25,R.drawable.pic26,R.drawable.pic27,};
 
     private int number;
+
+    boolean inflated;
+
     public GuessFragment(int num) {
         this.number = num;
     }
@@ -67,13 +70,23 @@ public class GuessFragment extends Fragment {
         ImageView imageView = view.findViewById(R.id.fragment_image);
         imageView.setImageResource(arr[position]);
 
-        Button button = view.findViewById(R.id.fragment_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageView back_button = getActivity().findViewById(R.id.toolbar_left);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                getActivity().onBackPressed();
+                if(inflated) {
+                    getActivity().onBackPressed();
+                }
             }
 
         });
+        inflated = true;
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        inflated = false;
+        super.onDestroy();
     }
 }
