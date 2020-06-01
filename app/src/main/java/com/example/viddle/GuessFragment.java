@@ -1,5 +1,7 @@
 package com.example.viddle;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,8 +67,8 @@ public class GuessFragment extends Fragment {
         int position = bundle.getInt("position");
         View view = inflater.inflate(R.layout.fragment_guess, container, false);
 
-        TextView textView = view.findViewById(R.id.fragment_text);
-        textView.setText("" + position);
+        TextView textView_center = getActivity().findViewById(R.id.toolbar_center);
+        textView_center.setText("" + (position + 1));
 
         ImageView imageView = view.findViewById(R.id.fragment_image);
         imageView.setImageResource(arr[position]);
@@ -80,6 +83,9 @@ public class GuessFragment extends Fragment {
             }
 
         });
+
+
+
         inflated = true;
         return view;
     }
@@ -87,6 +93,11 @@ public class GuessFragment extends Fragment {
     @Override
     public void onDestroy() {
         inflated = false;
+        TextView textView = getActivity().findViewById(R.id.toolbar_center);
+        textView.setText("Classic");
+        //really dumb way of getting rid of the keyboard
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
         super.onDestroy();
     }
 }
