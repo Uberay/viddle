@@ -97,7 +97,8 @@ public class GuessFragment extends Fragment {
         textView.setText("Classic");
         //really dumb way of getting rid of the keyboard
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
         super.onDestroy();
     }
 }

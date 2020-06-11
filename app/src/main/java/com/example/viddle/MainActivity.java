@@ -1,5 +1,6 @@
 package com.example.viddle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -8,8 +9,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -30,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             R.drawable.pic22,R.drawable.pic23,R.drawable.pic24,
             R.drawable.pic25,R.drawable.pic26,R.drawable.pic27,};
 
+    //this will store the instance of the user data and save for later
+    UserData user;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +67,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setHasFixedSize(true);
 
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =  sharedPref.edit();
+        editor.putString("key", "sample message");
+        editor.commit();
+        Log.i("heck",sharedPref.getString("key", "did not exist!"));
+
+        boolean[] sample_puzzle = {true, false, false, true, true, false};
+        String[] hints_list = {"Apple", "Banana", "Pineapple", "Corn", "Apricot"};
+
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray = new JSONArray(sample_puzzle);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("heck", jsonArray.toString());
+
+        Gson gson = new Gson();
+        PuzzleSingle single = new PuzzleSingle("Jake", false, hints_list, sample_puzzle);
+        String json = gson.toJson(single);
+        Log.i("heck", json);
+        PuzzleSingle two = gson.fromJson(json, PuzzleSingle.class);
+        Log.i("heck", two.get_answer());
+
+        //the class works!
+        this.user = new UserData(sharedPref);
+        this.user.save_data(this.getPreferences(Context.MODE_PRIVATE));
+        Log.i("heck", "worked!");
     }
 
     @Override
@@ -69,5 +111,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.replace(R.id.frame, guessFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
